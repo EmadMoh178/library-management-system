@@ -1,6 +1,5 @@
 package com.example.library_management.controller;
 
-import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Book;
 import com.example.library_management.service.BookService;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +24,9 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable Long id) {
-        try {
-            Book book = bookService.getBookById(id);
-            return ResponseEntity.ok(book);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
+    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
+        Book book = bookService.getBookById(id);
+        return ResponseEntity.ok(book);
     }
 
     @PostMapping
@@ -42,21 +37,13 @@ public class BookController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> updateBook(@PathVariable Long id, @Valid @RequestBody Book updatedBook) {
-        try {
-            String message = bookService.updateBook(id, updatedBook);
-            return ResponseEntity.ok(message);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
+        String message = bookService.updateBook(id, updatedBook);
+        return ResponseEntity.ok(message);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Long id) {
-        try {
-            String message = bookService.deleteBook(id);
-            return ResponseEntity.ok(message);
-        } catch (NotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
+        String message = bookService.deleteBook(id);
+        return ResponseEntity.ok(message);
     }
 }
