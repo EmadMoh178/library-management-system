@@ -1,8 +1,10 @@
 package com.example.library_management.service;
 
+import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Book;
 import com.example.library_management.repository.BookRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +21,8 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Optional<Book> getBookById(Long id) {
-        return bookRepository.findById(id);
+    public Book getBookById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book with ID " + id + " not found"));
     }
 
     public String addBook(Book book) {
@@ -36,13 +38,13 @@ public class BookService {
             book.setIsbn(updatedBook.getIsbn());
             bookRepository.save(book);
             return "Book updated successfully";
-        }).orElse("Book with ID " + id + " not found");
+        }).orElseThrow(() -> new NotFoundException("Book with ID " + id + " not found"));
     }
 
     public String deleteBook(Long id) {
         return bookRepository.findById(id).map(book -> {
             bookRepository.delete(book);
             return "Book deleted successfully";
-        }).orElse("Book with ID " + id + " not found");
+        }).orElseThrow(() -> new NotFoundException("Book with ID " + id + " not found"));
     }
 }

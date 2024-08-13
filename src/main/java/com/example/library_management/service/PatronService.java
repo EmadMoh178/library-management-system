@@ -1,8 +1,10 @@
 package com.example.library_management.service;
 
+import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Patron;
 import com.example.library_management.repository.PatronRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +21,8 @@ public class PatronService {
         return patronRepository.findAll();
     }
 
-    public Optional<Patron> getPatronById(Long id) {
-        return patronRepository.findById(id);
+    public Patron getPatronById(Long id) {
+        return patronRepository.findById(id).orElseThrow(() -> new NotFoundException("Patron with ID " + id + " not found"));
     }
 
     public String addPatron(Patron patron) {
@@ -36,13 +38,13 @@ public class PatronService {
             patron.setMembershipDate(updatedPatron.getMembershipDate());
             patronRepository.save(patron);
             return "Patron updated successfully";
-        }).orElse("Patron with ID " + id + " not found");
+        }).orElseThrow(() -> new NotFoundException("Patron with ID " + id + " not found"));
     }
 
     public String deletePatron(Long id) {
         return patronRepository.findById(id).map(patron -> {
             patronRepository.delete(patron);
             return "Patron deleted successfully";
-        }).orElse("Patron with ID " + id + " not found");
+        }).orElseThrow(() -> new NotFoundException("Patron with ID " + id + " not found"));
     }
 }

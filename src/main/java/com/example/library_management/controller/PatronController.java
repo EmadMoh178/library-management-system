@@ -1,10 +1,12 @@
 package com.example.library_management.controller;
 
+import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Patron;
 import com.example.library_management.service.PatronService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,27 +25,38 @@ public class PatronController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<String> getPatronById(@PathVariable Long id) {
-        return patronService.getPatronById(id)
-                .map(patron -> ResponseEntity.ok(patron.toString()))  // Convert the patron object to string or JSON
-                .orElse(ResponseEntity.status(404).body("Patron with ID " + id + " not found"));
+    public ResponseEntity<?> getPatronById(@PathVariable Long id) {
+        try {
+            Patron patron = patronService.getPatronById(id);
+            return ResponseEntity.ok(patron);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<String> addPatron(@RequestBody Patron patron) {
+    public ResponseEntity<String> addPatron(@Valid @RequestBody Patron patron) {
         String message = patronService.addPatron(patron);
         return ResponseEntity.ok(message);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePatron(@PathVariable Long id, @RequestBody Patron updatedPatron) {
-        String message = patronService.updatePatron(id, updatedPatron);
-        return ResponseEntity.status(message.equals("Patron with ID " + id + " not found") ? 404 : 200).body(message);
+    public ResponseEntity<String> updatePatron(@PathVariable Long id, @Valid @RequestBody Patron updatedPatron) {
+        try {
+            String message = patronService.updatePatron(id, updatedPatron);
+            return ResponseEntity.ok(message);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletePatron(@PathVariable Long id) {
-        String message = patronService.deletePatron(id);
-        return ResponseEntity.status(message.equals("Patron with ID " + id + " not found") ? 404 : 200).body(message);
+        try {
+            String message = patronService.deletePatron(id);
+            return ResponseEntity.ok(message);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 }
