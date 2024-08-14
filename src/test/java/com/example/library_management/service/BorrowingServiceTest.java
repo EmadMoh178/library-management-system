@@ -103,6 +103,18 @@ public class BorrowingServiceTest {
     }
 
     @Test
+    public void testReturnBookAlreadyReturned() {
+        borrowingRecord.setReturnDate(LocalDate.now());
+
+        when(borrowingRecordRepository.findByBookIdAndPatronIdAndReturnDateIsNull(1L, 1L)).thenReturn(Optional.empty());
+
+        String result = borrowingService.returnBook(1L, 1L);
+
+        assertEquals("Borrowing record not found for Book with ID 1 and Patron with ID 1, or book already returned", result);
+        verify(borrowingRecordRepository, never()).save(any(BorrowingRecord.class));
+    }
+
+    @Test
     public void testReturnBookNotFound() {
         when(borrowingRecordRepository.findByBookIdAndPatronIdAndReturnDateIsNull(1L, 1L)).thenReturn(Optional.empty());
 

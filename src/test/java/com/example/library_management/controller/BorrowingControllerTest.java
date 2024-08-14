@@ -57,6 +57,15 @@ public class BorrowingControllerTest {
     }
 
     @Test
+    public void testReturnBookAlreadyReturned() throws Exception {
+        when(borrowingService.returnBook(1L, 1L)).thenReturn("Borrowing record not found for Book with ID 1 and Patron with ID 1, or book already returned");
+
+        mockMvc.perform(put("/api/return/1/patron/1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Borrowing record not found for Book with ID 1 and Patron with ID 1, or book already returned"));
+    }
+
+    @Test
     public void testReturnBookNotFound() throws Exception {
         when(borrowingService.returnBook(1L, 1L)).thenReturn("Borrowing record not found for Book with ID 1 and Patron with ID 1, or book already returned");
 
@@ -64,4 +73,5 @@ public class BorrowingControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Borrowing record not found for Book with ID 1 and Patron with ID 1, or book already returned"));
     }
+
 }

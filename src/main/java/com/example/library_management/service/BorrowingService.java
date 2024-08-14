@@ -32,10 +32,10 @@ public class BorrowingService {
         Optional<Book> bookOpt = bookRepository.findById(bookId);
         Optional<Patron> patronOpt = patronRepository.findById(patronId);
 
-        if (!bookOpt.isPresent()) {
+        if (bookOpt.isEmpty()) {
             return "Book with ID " + bookId + " not found";
         }
-        if (!patronOpt.isPresent()) {
+        if (patronOpt.isEmpty()) {
             return "Patron with ID " + patronId + " not found";
         }
 
