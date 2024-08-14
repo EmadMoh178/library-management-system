@@ -4,9 +4,9 @@ import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Patron;
 import com.example.library_management.repository.PatronRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatronService {
@@ -17,19 +17,23 @@ public class PatronService {
         this.patronRepository = patronRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Patron> getAllPatrons() {
         return patronRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Patron getPatronById(Long id) {
         return patronRepository.findById(id).orElseThrow(() -> new NotFoundException("Patron with ID " + id + " not found"));
     }
 
+    @Transactional
     public String addPatron(Patron patron) {
         patronRepository.save(patron);
         return "Patron added successfully";
     }
 
+    @Transactional
     public String updatePatron(Long id, Patron updatedPatron) {
         return patronRepository.findById(id).map(patron -> {
             patron.setName(updatedPatron.getName());
@@ -41,6 +45,7 @@ public class PatronService {
         }).orElseThrow(() -> new NotFoundException("Patron with ID " + id + " not found"));
     }
 
+    @Transactional
     public String deletePatron(Long id) {
         return patronRepository.findById(id).map(patron -> {
             patronRepository.delete(patron);

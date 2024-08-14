@@ -4,9 +4,9 @@ import com.example.library_management.exception.NotFoundException;
 import com.example.library_management.model.Book;
 import com.example.library_management.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookService {
@@ -17,19 +17,23 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Book getBookById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book with ID " + id + " not found"));
     }
 
+    @Transactional
     public String addBook(Book book) {
         bookRepository.save(book);
         return "Book added successfully";
     }
 
+    @Transactional
     public String updateBook(Long id, Book updatedBook) {
         return bookRepository.findById(id).map(book -> {
             book.setTitle(updatedBook.getTitle());
@@ -41,6 +45,7 @@ public class BookService {
         }).orElseThrow(() -> new NotFoundException("Book with ID " + id + " not found"));
     }
 
+    @Transactional
     public String deleteBook(Long id) {
         return bookRepository.findById(id).map(book -> {
             bookRepository.delete(book);

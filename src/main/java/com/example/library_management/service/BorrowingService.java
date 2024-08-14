@@ -7,6 +7,8 @@ import com.example.library_management.repository.BookRepository;
 import com.example.library_management.repository.BorrowingRecordRepository;
 import com.example.library_management.repository.PatronRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ public class BorrowingService {
         this.patronRepository = patronRepository;
     }
 
+    @Transactional
     public String borrowBook(Long bookId, Long patronId) {
         Optional<Book> bookOpt = bookRepository.findById(bookId);
         Optional<Patron> patronOpt = patronRepository.findById(patronId);
@@ -53,6 +56,7 @@ public class BorrowingService {
         return "Book with ID " + bookId + " borrowed successfully by Patron with ID " + patronId;
     }
 
+    @Transactional
     public String returnBook(Long bookId, Long patronId) {
         Optional<BorrowingRecord> recordOpt = borrowingRecordRepository.findByBookIdAndPatronIdAndReturnDateIsNull(bookId, patronId);
         if (!recordOpt.isPresent()) {
