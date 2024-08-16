@@ -1,5 +1,16 @@
 # Library Management System
 
+## Project Overview
+
+The Library Management System is a RESTful API application designed to manage books, patrons, and borrowing records for a library. The system allows users to perform operations such as adding, updating, retrieving, and deleting books and patrons, as well as managing the borrowing and returning of books.
+
+## Demo
+
+Check out the demo!
+
+https://github.com/user-attachments/assets/b2bc2099-8ab1-47c8-9aec-f7e9b7c7b439
+
+
 ## Project Setup
 
 ### Prerequisites
