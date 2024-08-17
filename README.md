@@ -2,14 +2,12 @@
 
 ## Project Overview
 
-The Library Management System is a RESTful API application designed to manage books, patrons, and borrowing records for a library. The system allows users to perform operations such as adding, updating, retrieving, and deleting books and patrons, as well as managing the borrowing and returning of books.
-
+The Library Management System is a RESTful API application designed to manage books, patrons, and borrowing records for a library. The system enables users to perform CRUD operations on books and patrons, and facilitates the borrowing and returning of books by patrons.
 ## Demo
 
 Check out the demo!
 
 https://github.com/user-attachments/assets/b2bc2099-8ab1-47c8-9aec-f7e9b7c7b439
-
 
 ## Project Setup
 
@@ -56,6 +54,7 @@ DB_PASSWORD=your_postgres_password
    GRANT ALL PRIVILEGES ON DATABASE library_management TO your_postgres_username;
    \c library_management;
    GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO your_postgres_username;
+   GRANT CREATE ON SCHEMA public TO your_postgres_username;
    ```
 
 Replace `your_postgres_username` and `your_postgres_password` with your preferred credentials.
@@ -184,4 +183,3 @@ You can use tools like Postman to test the API endpoints.
 
 - Ensure PostgreSQL is running and accessible.
 - Verify that the `.env` file contains the correct credentials.
-
