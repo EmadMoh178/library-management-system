@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableCaching
+@EnableAspectJAutoProxy
 public class LibraryManagementApplication {
 
 	public static void main(String[] args) {
