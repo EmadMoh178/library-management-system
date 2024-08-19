@@ -3,11 +3,19 @@
 ## Project Overview
 
 The Library Management System is a RESTful API application designed to manage books, patrons, and borrowing records for a library. The system enables users to perform CRUD operations on books and patrons, and facilitates the borrowing and returning of books by patrons.
+
+## Features
+
+- **Caching**: Utilizes Spring’s caching mechanisms to improve system performance by caching frequently accessed data such as book details and patron information.
+- **Aspect-Oriented Programming (AOP)**: Implements logging using AOP to track method calls and performance metrics of operations.
+- **JWT Authorization**: Protects endpoints with JWT-based authorization to ensure secure access to resources. Users must authenticate to receive a token which is required for accessing protected endpoints.
+- **Transaction Management**: Uses Spring’s `@Transactional` annotation to manage transactions and ensure data integrity during critical operations.
+
 ## Demo
 
 Check out the demo!
 
-https://github.com/user-attachments/assets/b2bc2099-8ab1-47c8-9aec-f7e9b7c7b439
+https://github.com/user-attachments/assets/5d1b4534-b138-4e6f-98ac-bb03d5afced8
 
 ## Project Setup
 
@@ -31,6 +39,7 @@ Create a file named `.env` at the root of the project and add your PostgreSQL cr
 ```
 DB_USERNAME=your_postgres_username
 DB_PASSWORD=your_postgres_password
+JWT_SECRET=your_jwt_secret_key
 ```
 
 ### Database Setup
@@ -73,11 +82,49 @@ Replace `your_postgres_username` and `your_postgres_password` with your preferre
    mvn spring-boot:run
    ```
 
-### API Endpoints
+## API Endpoints
 
 All endpoints are prefixed with `http://localhost:8080/api`.
 
-#### Book Management
+### User Management
+
+- **POST** `/auth/signup`
+
+  Register a new user.
+
+  Request Body:
+
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "userpassword",
+    "name": "User Name"
+  }
+  ```
+
+- **POST** `/auth/login`
+
+  Authenticate and obtain a JWT token.
+
+  Request Body:
+
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "userpassword"
+  }
+  ```
+
+- **POST** `/auth/logout`
+
+  Log out a user. This endpoint requires a JWT token to be sent as a bearer token in the request header.
+
+### Authorization Note
+
+**Important**: All endpoints other than the ones related to user authentication (`/auth/signup`, `/auth/login`, and `/auth/logout`) require a JWT token for access. To interact with these protected endpoints, you must first register and log in to receive a JWT token. Include this token in the `Authorization` header as a Bearer token when making requests to these endpoints.
+
+
+### Book Management
 
 - **GET** `/books`
 
@@ -121,7 +168,7 @@ All endpoints are prefixed with `http://localhost:8080/api`.
 
   Remove a book from the library.
 
-#### Patron Management
+### Patron Management
 
 - **GET** `/patrons`
 
@@ -165,7 +212,7 @@ All endpoints are prefixed with `http://localhost:8080/api`.
 
   Remove a patron from the system.
 
-#### Borrowing
+### Borrowing
 
 - **POST** `/borrow/{bookId}/patron/{patronId}`
 
@@ -175,11 +222,11 @@ All endpoints are prefixed with `http://localhost:8080/api`.
 
   Record the return of a borrowed book by a patron.
 
-### Testing
+## Testing
 
 You can use tools like Postman to test the API endpoints.
 
-### Troubleshooting
+## Troubleshooting
 
 - Ensure PostgreSQL is running and accessible.
 - Verify that the `.env` file contains the correct credentials.
